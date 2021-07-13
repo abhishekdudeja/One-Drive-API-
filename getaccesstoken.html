@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>One drive</title>
+  
+</head>
+<body>
+
+<h1>My One drive</h1>
+
+
+   <h1>Live</h1>
+
+This is client credential flow.
+
+Requirements for authorization....
+
+client_id :Get app id from application 
+response_type: Code
+redirect_uri : On which you want to get codes
+response_mode : There are three types of mode you can check in azure deocumentation,
+scope=Scope is access you want in account. Choose them according to your requirement.
+state=Random number you will get in return.
+code_challenge : Remember you need 43 digit in code verifier in second step. Create it exactly from here. "https://tonyxu-io.github.io/pkce-generator/"  PKCE generator
+code_challenge_method:s256
+
+
+New new flow :
+// Line breaks for legibility only
+
+https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=<app id>&response_type=code&redirect_uri=<redirect url>&response_mode=query&scope=<scopes according to requirement>&state=12345&code_challenge=<codechallenge>&code_challenge_method=S256
+
+  Hit the above URL on browser you well get all its response in url.
+
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+  
+$(document).ready(function(){
+
+
+var verifier="";
+var code="0.AVMA3k6VPNRuIkO4GkdoyCMuSF65iWBT4d9PpcFawWzAWW1TAAA.AQABAAIAAAD--DLA3VO7QrddgJg7WevrpaRb5-Ua754QYKHuc5isCiTZZnMIMo2JLxhjDrRoO1BF-jnS_PMpyImU9t6pCU5YRwKHKIuwFqYnqa88SC8bIEtnYmSu4eleljq2cTa9SjNzds_0jhZ-45aSvTuChSp-PCCgT6-UWWwynvBw7c_8AuYkviRpM-_lkA-qB-RmC5TD9kDaW92eEEFmods49pd1Vg1g69OeuAyKjSSBGvw24Zo1mx-GCjyp6Yrnrae5mB7Ju7biIUWzegFOgcCRu7aZRbHStTwq0LYiGnj6NcI147nmytVqs1UQcvQumlWY_GpF3noTgIuymcNR5s_NL0PsZNNShJscWzmach-zssND9si1TJL6Fmh-5igGRVZkJqvSujgB8uRs9L0vBJUArUTv1AL2RGuqjMj-MPdsChnNj2fxydYqFjL-4pDGglTyKXTUEXtLb9nLkL34P4pvOKUumK-84R83xKBTD4mr9NWArNg_5hIquo5-aFFtXFNFUUGnWyIllHrOgdQrrU8GSNKFoyjunmwUnVTqKaUdXV4MJgXcffuE2c2bmBlvi5s_-1MctaYaOW-w1gO4gkJR3uDjJdBlfQBgF-HbHavQsF-rmMxswd1dds27zrKC_TpUybTkHDCqTkFJVcEeRkbCxkY4Il8Ljo8XlGMvTje_GFToMzurD4lrC5zhEiCIkm2q2snIL34UV22VAOepZrx8CbG6IAA";
+
+var settings = {
+  "url": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+  "method": "POST",
+  "timeout": 0,
+  "headers": {
+    "Content-Type": "application/x-www-form-urlencoded",
+   // "Cookie": "fpc=Ahsmk-3o3tNPjwmyoaL0Vh_sBeumAgAAALsSZtgOAAAA; stsservicecookie=estsfd; x-ms-gateway-slice=estsfd"
+  },
+  "data": {
+    "grant_type": "authorization_code",
+
+    "client_id": "<app id>",
+    "scope": "offline_access Sites.Read.All Sites.ReadWrite.All",
+    "code":<code>,// You will get this is first get request.
+   
+    "redirect_uri":"<on which you want reposne>",
+    "state":"12345",
+    "code_verifier":"<Your 43 digit code here create from PKCE generator >",
+    
+  }
+};
+
+ $.ajax(settings).done(function (response) {
+console.log(response);//You will get access token and refresh token in response you can generate new refresh token and access token every hour using cron on server
+
+ });
+
+
+});
+
+  
+
+</script>
+</html>
+
+
+
+
+
+
+
